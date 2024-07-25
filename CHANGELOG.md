@@ -1,9 +1,17 @@
-# Change Log
+# Changelog
 
-All notable changes to the "text-indent-highlighter" extension will be documented in this file.
+## [0.0.5] - 2024-07-25
+### Added
+- 실시간으로 들여쓰기 색상을 업데이트하는 기능 추가.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+### Changed
+- `updateDecorations` 함수 개선.
 
-## [Unreleased]
+## [0.0.3] - 2024-07-25
+### Added
+- 사용자 설정을 통해 들여쓰기 색상을 지정할 수 있는 기능 추가.
 
-- Initial release
+## [0.0.2] - 2024-07-25
+### Added
+- 초기 버전 배포.
+- 기본 들여쓰기 색상 설정.
