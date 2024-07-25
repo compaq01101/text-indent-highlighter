@@ -1,71 +1,26 @@
-# text-indent-highlighter README
+# Text Indent Highlighter
 
-This is the README for your extension "text-indent-highlighter". After writing up a brief description, we recommend including the following sections.
+**Text Indent Highlighter**는 Visual Studio Code에서 들여쓰기 수준에 따라 텍스트 색상을 변경해주는 확장 프로그램입니다.
 
-## Features
+## 기능
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- 텍스트 파일에서 들여쓰기 수준에 따라 텍스트 색상 변경
+- 실시간으로 들여쓰기 색상 업데이트
 
-For example if there is an image subfolder under your extension project workspace:
+## 설치
 
-\!\[feature X\]\(images/feature-x.png\)
+1. [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/)에서 **Text Indent Highlighter**를 검색합니다.
+2. 설치 버튼을 클릭하여 확장 프로그램을 설치합니다.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## 사용 방법
 
-## Requirements
+1. Visual Studio Code에서 `.txt` 파일을 엽니다.
+2. 들여쓰기를 사용하여 텍스트를 작성하면, 각 들여쓰기 수준에 따라 텍스트 색상이 변경됩니다.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## 기여
 
-## Extension Settings
+기여를 원하시면, [GitHub 저장소](https://github.com/compaq01101/text-indent-highlighter)를 방문하여 풀 리퀘스트를 제출해 주세요.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+## 라이선스
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+이 확장 프로그램은 [Custom License](LICENSE)에 따라 배포됩니다.

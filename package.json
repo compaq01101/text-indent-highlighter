@@ -13,6 +13,10 @@
 	  "onLanguage:plaintext"
 	],
 	"main": "./dist/extension.js",
+	"repository": {
+	  "type": "git",
+	  "url": "https://github.com/compaq01101/text-indent-highlighter"
+	},
 	"scripts": {
 	  "vscode:prepublish": "npm run package",
 	  "compile": "webpack",
