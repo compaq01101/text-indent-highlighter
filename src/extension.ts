@@ -1,65 +1,68 @@
 import * as vscode from 'vscode';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+const colorDecorationTypes: { [key: number]: vscode.TextEditorDecorationType } = {
+    1: vscode.window.createTextEditorDecorationType({ color: '#dc8580' }),
+    2: vscode.window.createTextEditorDecorationType({ color: '#f2e6b1' }),
+    3: vscode.window.createTextEditorDecorationType({ color: '#95dab6' }),
+    4: vscode.window.createTextEditorDecorationType({ color: '#83b2d0' }),
+    5: vscode.window.createTextEditorDecorationType({ color: '#7f87b2' })
+    // Add more colors as needed
+};
 
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "text-indent-highlighter" is now active!');
+function updateDecorations(editor: vscode.TextEditor | undefined) {
+    if (!editor) {
+        return;
+    }
 
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with registerCommand
-    // The commandId parameter must match the command field in package.json
-    const disposable = vscode.commands.registerCommand('text-indent-highlighter.helloWorld', () => {
-        // The code you place here will be executed every time your command is executed
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World from Text Indent Highlighter!');
-    });
+    const document = editor.document;
+    const text = document.getText();
+    const lines = text.split('\n');
 
-    context.subscriptions.push(disposable);
+    let ranges: { [key: number]: vscode.DecorationOptions[] } = {};
 
-    // Add an event listener for document changes
-    let disposableTextChange = vscode.workspace.onDidChangeTextDocument(event => {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const indentLevel = line.search(/\S|$/);
+
+        if (!ranges[indentLevel]) {
+            ranges[indentLevel] = [];
         }
 
-        const document = editor.document;
-        const text = document.getText();
-        const lines = text.split('\n');
+        const range = new vscode.Range(new vscode.Position(i, 0), new vscode.Position(i, line.length));
+        ranges[indentLevel].push({ range });
+    }
 
-        const colorDecorationTypes: { [key: number]: vscode.TextEditorDecorationType } = {
-            1: vscode.window.createTextEditorDecorationType({ color: '#FF0000' }),
-            2: vscode.window.createTextEditorDecorationType({ color: '#00FF00' }),
-            3: vscode.window.createTextEditorDecorationType({ color: '#0000FF' }),
-            // Add more colors as needed
-        };
-
-        let ranges: { [key: number]: vscode.DecorationOptions[] } = {};
-
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            const indentLevel = line.search(/\S|$/);
-
-            if (indentLevel > 0 && colorDecorationTypes[indentLevel]) {
-                if (!ranges[indentLevel]) {
-                    ranges[indentLevel] = [];
-                }
-
-                const range = new vscode.Range(new vscode.Position(i, 0), new vscode.Position(i, line.length));
-                ranges[indentLevel].push({ range });
-            }
-        }
-
-        for (let indentLevel in colorDecorationTypes) {
-            editor.setDecorations(colorDecorationTypes[indentLevel], ranges[indentLevel] || []);
-        }
-    });
-
-    context.subscriptions.push(disposableTextChange);
+    for (let indentLevel in colorDecorationTypes) {
+        editor.setDecorations(colorDecorationTypes[indentLevel], ranges[indentLevel] || []);
+    }
 }
 
-// This method is called when your extension is deactivated
+export function activate(context: vscode.ExtensionContext) {
+    console.log('The "text-indent-highlighter" extension is now active!');
+
+    vscode.window.onDidChangeActiveTextEditor(editor => {
+        if (editor) {
+            updateDecorations(editor);
+        }
+    }, null, context.subscriptions);
+
+    vscode.workspace.onDidOpenTextDocument(document => {
+        const editor = vscode.window.visibleTextEditors.find(e => e.document === document);
+        if (editor) {
+            updateDecorations(editor);
+        }
+    }, null, context.subscriptions);
+
+    vscode.workspace.onDidChangeTextDocument(event => {
+        const editor = vscode.window.visibleTextEditors.find(e => e.document === event.document);
+        if (editor) {
+            updateDecorations(editor);
+        }
+    }, null, context.subscriptions);
+
+    if (vscode.window.activeTextEditor) {
+        updateDecorations(vscode.window.activeTextEditor);
+    }
+}
+
 export function deactivate() {}
