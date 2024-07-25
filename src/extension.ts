@@ -1,5 +1,26 @@
 import * as vscode from 'vscode';
 
+let colorDecorationTypes: { [key: number]: vscode.TextEditorDecorationType } = {};
+
+function createColorDecorationTypes() {
+    const config = vscode.workspace.getConfiguration('textIndentHighlighter');
+    const colors = config.get<string[]>('colors', ["#dc8580", "#f2e6b1", "#95dab6", "#83b2d0", "#7f87b2"]);
+
+    // 기존 장식 유형 제거
+    for (const key in colorDecorationTypes) {
+        if (colorDecorationTypes.hasOwnProperty(key)) {
+            colorDecorationTypes[key].dispose();
+        }
+    }
+
+    colorDecorationTypes = {};
+
+    // 색상 장식 유형 생성
+    for (let i = 0; i < colors.length; i++) {
+        colorDecorationTypes[i] = vscode.window.createTextEditorDecorationType({ color: colors[i] });
+    }
+}
+
 function updateDecorations(editor: vscode.TextEditor | undefined) {
     if (!editor || editor.document.languageId !== 'plaintext') {
         return;
@@ -11,11 +32,7 @@ function updateDecorations(editor: vscode.TextEditor | undefined) {
 
     const config = vscode.workspace.getConfiguration('textIndentHighlighter');
     const colors = config.get<string[]>('colors', ["#dc8580", "#f2e6b1", "#95dab6", "#83b2d0", "#7f87b2"]);
-
-    const colorDecorationTypes: { [key: number]: vscode.TextEditorDecorationType } = {};
-    for (let i = 0; i < colors.length; i++) {
-        colorDecorationTypes[i + 1] = vscode.window.createTextEditorDecorationType({ color: colors[i] });
-    }
+    const colorCount = colors.length;
 
     let ranges: { [key: number]: vscode.DecorationOptions[] } = {};
 
@@ -23,18 +40,27 @@ function updateDecorations(editor: vscode.TextEditor | undefined) {
         const line = lines[i];
         const indentLevel = line.search(/\S|$/);
 
-        if (indentLevel > 0 && colorDecorationTypes[indentLevel]) {
-            if (!ranges[indentLevel]) {
-                ranges[indentLevel] = [];
+        if (indentLevel > 0) {
+            const colorIndex = (indentLevel - 1) % colorCount; // 색상 인덱스 계산
+            if (!ranges[colorIndex]) {
+                ranges[colorIndex] = [];
             }
 
             const range = new vscode.Range(new vscode.Position(i, 0), new vscode.Position(i, line.length));
-            ranges[indentLevel].push({ range });
+            ranges[colorIndex].push({ range });
         }
     }
 
-    for (let indentLevel in colorDecorationTypes) {
-        editor.setDecorations(colorDecorationTypes[indentLevel], ranges[indentLevel] || []);
+    for (let colorIndex in colorDecorationTypes) {
+        editor.setDecorations(colorDecorationTypes[colorIndex], ranges[colorIndex] || []);
+    }
+}
+
+function triggerUpdateDecorations() {
+    createColorDecorationTypes(); // 색상 장식 유형 재생성
+    const editors = vscode.window.visibleTextEditors;
+    for (const editor of editors) {
+        updateDecorations(editor);
     }
 }
 
@@ -61,8 +87,14 @@ export function activate(context: vscode.ExtensionContext) {
         }
     }, null, context.subscriptions);
 
+    vscode.workspace.onDidChangeConfiguration(event => {
+        if (event.affectsConfiguration('textIndentHighlighter.colors')) {
+            triggerUpdateDecorations();
+        }
+    }, null, context.subscriptions);
+
     if (vscode.window.activeTextEditor) {
-        updateDecorations(vscode.window.activeTextEditor);
+        triggerUpdateDecorations();
     }
 
     vscode.window.showInformationMessage(
@@ -70,4 +102,10 @@ export function activate(context: vscode.ExtensionContext) {
     );
 }
 
-export function deactivate() {}
+export function deactivate() {
+    for (const key in colorDecorationTypes) {
+        if (colorDecorationTypes.hasOwnProperty(key)) {
+            colorDecorationTypes[key].dispose();
+        }
+    }
+}
