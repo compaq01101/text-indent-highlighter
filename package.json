@@ -2,7 +2,7 @@
 	"name": "text-indent-highlighter",
 	"displayName": "Text Indent Highlighter",
 	"description": "Highlights text based on indentation levels with different colors in VS Code.",
-	"version": "0.0.2",
+	"version": "0.0.4",
 	"publisher": "KJW",
 	"engines": {
 	  "vscode": "^1.91.0"
@@ -29,6 +29,23 @@
 	  "pretest": "npm run compile-tests && npm run compile && npm run lint",
 	  "lint": "eslint src --ext ts",
 	  "test": "vscode-test"
+	},
+	"contributes": {
+	  "configuration": {
+		"type": "object",
+		"title": "Text Indent Highlighter",
+		"properties": {
+		  "textIndentHighlighter.colors": {
+			"type": "array",
+			"description": "List of colors for indentation levels.",
+			"items": {
+			  "type": "string",
+			  "format": "color"
+			},
+			"default": ["#dc8580", "#f2e6b1", "#95dab6", "#83b2d0", "#7f87b2"]
+		  }
+		}
+	  }
 	},
 	"devDependencies": {
 	  "@types/vscode": "^1.91.0",

@@ -12,6 +12,22 @@
 1. [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/)에서 **Text Indent Highlighter**를 검색합니다.
 2. 설치 버튼을 클릭하여 확장 프로그램을 설치합니다.
 
+## 설정
+
+설치 후, `settings.json` 파일에 다음 설정을 추가하여 들여쓰기 색상을 사용자 정의할 수 있습니다:
+
+```
+{
+  "textIndentHighlighter.colors": [
+    "#ff0000",  // 1-level indent color
+    "#00ff00",  // 2-level indent color
+    "#0000ff",  // 3-level indent color
+    "#ffff00",  // 4-level indent color
+    "#ff00ff"   // 5-level indent color
+  ]
+}
+```
+
 ## 사용 방법
 
 1. Visual Studio Code에서 `.txt` 파일을 엽니다.

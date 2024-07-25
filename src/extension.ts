@@ -9,14 +9,13 @@ function updateDecorations(editor: vscode.TextEditor | undefined) {
     const text = document.getText();
     const lines = text.split('\n');
 
-    const colorDecorationTypes: { [key: number]: vscode.TextEditorDecorationType } = {
-        1: vscode.window.createTextEditorDecorationType({ color: '#dc8580' }),
-        2: vscode.window.createTextEditorDecorationType({ color: '#f2e6b1' }),
-        3: vscode.window.createTextEditorDecorationType({ color: '#95dab6' }),
-        4: vscode.window.createTextEditorDecorationType({ color: '#83b2d0' }),
-        5: vscode.window.createTextEditorDecorationType({ color: '#7f87b2' })
-        // Add more colors as needed
-    };
+    const config = vscode.workspace.getConfiguration('textIndentHighlighter');
+    const colors = config.get<string[]>('colors', ["#dc8580", "#f2e6b1", "#95dab6", "#83b2d0", "#7f87b2"]);
+
+    const colorDecorationTypes: { [key: number]: vscode.TextEditorDecorationType } = {};
+    for (let i = 0; i < colors.length; i++) {
+        colorDecorationTypes[i + 1] = vscode.window.createTextEditorDecorationType({ color: colors[i] });
+    }
 
     let ranges: { [key: number]: vscode.DecorationOptions[] } = {};
 
@@ -65,6 +64,10 @@ export function activate(context: vscode.ExtensionContext) {
     if (vscode.window.activeTextEditor) {
         updateDecorations(vscode.window.activeTextEditor);
     }
+
+    vscode.window.showInformationMessage(
+        'To customize indentation colors, add "textIndentHighlighter.colors" to your settings.json.'
+    );
 }
 
 export function deactivate() {}
