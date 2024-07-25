@@ -1,16 +1,7 @@
 import * as vscode from 'vscode';
 
-const colorDecorationTypes: { [key: number]: vscode.TextEditorDecorationType } = {
-    1: vscode.window.createTextEditorDecorationType({ color: '#dc8580' }),
-    2: vscode.window.createTextEditorDecorationType({ color: '#f2e6b1' }),
-    3: vscode.window.createTextEditorDecorationType({ color: '#95dab6' }),
-    4: vscode.window.createTextEditorDecorationType({ color: '#83b2d0' }),
-    5: vscode.window.createTextEditorDecorationType({ color: '#7f87b2' })
-    // Add more colors as needed
-};
-
 function updateDecorations(editor: vscode.TextEditor | undefined) {
-    if (!editor) {
+    if (!editor || editor.document.languageId !== 'plaintext') {
         return;
     }
 
@@ -18,18 +9,29 @@ function updateDecorations(editor: vscode.TextEditor | undefined) {
     const text = document.getText();
     const lines = text.split('\n');
 
+    const colorDecorationTypes: { [key: number]: vscode.TextEditorDecorationType } = {
+        1: vscode.window.createTextEditorDecorationType({ color: '#dc8580' }),
+        2: vscode.window.createTextEditorDecorationType({ color: '#f2e6b1' }),
+        3: vscode.window.createTextEditorDecorationType({ color: '#95dab6' }),
+        4: vscode.window.createTextEditorDecorationType({ color: '#83b2d0' }),
+        5: vscode.window.createTextEditorDecorationType({ color: '#7f87b2' })
+        // Add more colors as needed
+    };
+
     let ranges: { [key: number]: vscode.DecorationOptions[] } = {};
 
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         const indentLevel = line.search(/\S|$/);
 
-        if (!ranges[indentLevel]) {
-            ranges[indentLevel] = [];
-        }
+        if (indentLevel > 0 && colorDecorationTypes[indentLevel]) {
+            if (!ranges[indentLevel]) {
+                ranges[indentLevel] = [];
+            }
 
-        const range = new vscode.Range(new vscode.Position(i, 0), new vscode.Position(i, line.length));
-        ranges[indentLevel].push({ range });
+            const range = new vscode.Range(new vscode.Position(i, 0), new vscode.Position(i, line.length));
+            ranges[indentLevel].push({ range });
+        }
     }
 
     for (let indentLevel in colorDecorationTypes) {
@@ -54,8 +56,8 @@ export function activate(context: vscode.ExtensionContext) {
     }, null, context.subscriptions);
 
     vscode.workspace.onDidChangeTextDocument(event => {
-        const editor = vscode.window.visibleTextEditors.find(e => e.document === event.document);
-        if (editor) {
+        const editor = vscode.window.activeTextEditor;
+        if (editor && event.document === editor.document) {
             updateDecorations(editor);
         }
     }, null, context.subscriptions);
