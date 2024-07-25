@@ -3,6 +3,7 @@
 	"displayName": "Text Indent Highlighter",
 	"description": "Highlights text based on indentation levels with different colors in VS Code.",
 	"version": "0.0.1",
+	"publisher": "KJW",
 	"engines": {
 	  "vscode": "^1.91.0"
 	},
