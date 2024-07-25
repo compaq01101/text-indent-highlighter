@@ -16,7 +16,7 @@
 
 설치 후, `settings.json` 파일에 다음 설정을 추가하여 들여쓰기 색상을 사용자 정의할 수 있습니다:
 
-```
+``` json
 {
   "textIndentHighlighter.colors": [
     "#ff0000",  // 1-level indent color
