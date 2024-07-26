@@ -61,8 +61,7 @@
 			"items": {
 			  "type": "string",
 			  "format": "color"
-			},
-			"default": ["#dc8580", "#f2e6b1", "#95dab6", "#83b2d0", "#7f87b2"]
+			}
 		  }
 		}
 	  }
@@ -81,5 +80,4 @@
 	  "@vscode/test-cli": "^0.0.9",
 	  "@vscode/test-electron": "^2.4.0"
 	}
-  }
-  
+}

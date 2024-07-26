@@ -1,6 +1,29 @@
 # Changelog
 
-## [0.0.7] - 2024-07-25
+## [0.0.8] - 2024-07-26
+### Fixed
+- 설정이 업데이트된 후 바로 데코레이션이 적용되지 않던 문제 수정.
+- VS Code 재시작 없이 설정 변경 사항이 즉시 반영되도록 수정.
+
+### Improved
+- `triggerUpdateDecorations` 함수와 설정 업데이트 로직을 개선하여 사용자 설정을 실시간으로 반영.
+
+### Added
+- 설정을 업데이트한 후 즉시 반영되도록 개선.
+- `updateColorsSettingAndTriggerUpdate` 함수 추가.
+
+### Fixed
+- Fixed issue where decorations were not applied immediately after settings update.
+- Fixed issue to reflect setting changes without restarting VS Code.
+
+### Improved
+- Improved `triggerUpdateDecorations` function and settings update logic to reflect user settings in real-time.
+
+### Added
+- Enhanced to apply settings updates immediately.
+- Added `updateColorsSettingAndTriggerUpdate` function.
+
+## [0.0.7] - 2024-07-26
 ### Added
 - 기본 설정을 `settings.json`에 자동으로 추가하는 기능.
 - 사용자 설정을 추가하도록 안내 메시지 표시 기능.
