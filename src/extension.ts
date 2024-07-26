@@ -17,7 +17,7 @@ function createColorDecorationTypes() {
 
     // 색상 장식 유형 생성
     for (let i = 0; i < colors.length; i++) {
-        colorDecorationTypes[i] = vscode.window.createTextEditorDecorationType({ color: colors[i] });
+        colorDecorationTypes[i + 1] = vscode.window.createTextEditorDecorationType({ color: colors[i] });
     }
 }
 
@@ -66,6 +66,11 @@ function triggerUpdateDecorations() {
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('The "text-indent-highlighter" extension is now active!');
+
+    const config = vscode.workspace.getConfiguration('textIndentHighlighter');
+    if (!config.has('colors')) {
+        config.update('colors', ["#dc8580", "#f2e6b1", "#95dab6", "#83b2d0", "#7f87b2"], vscode.ConfigurationTarget.Global);
+    }
 
     vscode.window.onDidChangeActiveTextEditor(editor => {
         if (editor) {
